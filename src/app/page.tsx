@@ -6,16 +6,8 @@ import { Button } from "@/components/ui/button"
 import { motion, AnimatePresence } from "framer-motion"
 import ReactCountryFlag from "react-country-flag"
 
-const countries = [
-  { name: "Cambodia", code: "KH" },
-  { name: "United States", code: "US" },
-  { name: "Thailand", code: "TH" },
-  { name: "Vietnam", code: "VN" },
-  { name: "Japan", code: "JP" },
-  { name: "China", code: "CN" },
-  { name: "France", code: "FR" },
-  { name: "Germany", code: "DE" },
-]
+import countries from "@/data/countries.json"
+
 
 export default function Home() {
   const [step, setStep] = useState(1)
@@ -45,7 +37,7 @@ export default function Home() {
     } else {
       setToCountry(country.name)
       setFiltered([])
-      window.location.href = "/map"
+      window.location.href = `/map?from=${countries.find(c => c.name === fromCountry)?.['alpha-3']}&to=${country['alpha-3']}`
     }
   }
 
@@ -61,10 +53,10 @@ export default function Home() {
     },
   }
 
-  const itemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 300, damping: 20 } },
-  }
+  // const itemVariants = {
+  //   hidden: { opacity: 0, x: -20 },
+  //   visible: { opacity: 1, x: 0, transition: { type: 'spring', stiffness: 300, damping: 20 } },
+  // }
 
   return (
 
@@ -104,13 +96,13 @@ export default function Home() {
                     >
                       {filtered.map((country) => (
                         <motion.li
-                          key={country.code}
+                          key={country['alpha-2']}
                           className="cursor-pointer flex items-center gap-3 px-4 py-4 text-2xl hover:bg-gray-100"
                           onClick={() => handleSelect(country)}
                           // variants={itemVariants}
                         >
                           <ReactCountryFlag
-                            countryCode={country.code}
+                            countryCode={country['alpha-2'] || ""}
                             svg
                             style={{ width: "1.5em", height: "1.5em" }}
                           />
@@ -157,13 +149,13 @@ export default function Home() {
                         .filter((country) => country.name !== fromCountry)
                         .map((country) => (
                           <motion.li
-                            key={country.code}
+                            key={country['alpha-2']}
                             className="cursor-pointer flex items-center gap-3 px-4 py-4 text-2xl hover:bg-gray-100"
                             onClick={() => handleSelect(country)}
                             // variants={itemVariants}
                           >
                             <ReactCountryFlag
-                              countryCode={country.code}
+                              countryCode={country['alpha-2'] || ""}
                               svg
                               style={{ width: "1.5em", height: "1.5em" }}
                             />
