@@ -3,12 +3,11 @@
 import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { useSearchParams } from "next/navigation";
 import countries from "@/data/countries.json";
+import { UserData } from "@/types/UserData";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
 
-// Helper to get coordinates
 const getCountryCoords = (alpha3: string, type: "capital" | "centroid"): [number, number] => {
   const country = countries.find((c) => c["alpha-3"] === alpha3);
   if (!country || country['cap-lat'] == null || country['cap-long'] == null) {
@@ -22,14 +21,18 @@ const getCountryCoords = (alpha3: string, type: "capital" | "centroid"): [number
       ];
 };
 
-const FlightMap = () => {
+interface FlightMapProps {
+  homeCountry: string;      // name of the country (from MultiStepForm)
+  visitingCountry: string;  // name of the country (from MultiStepForm)
+}
+
+const FlightMap: React.FC<FlightMapProps> = ({ homeCountry, visitingCountry }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
 
-  // Get URL query params
-  const searchParams = useSearchParams();
-  const fromCode = searchParams.get("from") || "USA";
-  const toCode = searchParams.get("to") || "KHM";
+  // Convert country names to alpha-3 codes
+  const fromCode = countries.find((c) => c.name === homeCountry)?.["alpha-3"] || "USA";
+  const toCode = countries.find((c) => c.name === visitingCountry)?.["alpha-3"] || "KHM";
 
   const ORIGIN = { code: fromCode, coords: getCountryCoords(fromCode, "centroid") };
   const DEST = { code: toCode, coords: getCountryCoords(toCode, "capital") };
@@ -38,7 +41,6 @@ const FlightMap = () => {
     const distance = Math.sqrt(
       Math.pow(to[0] - from[0], 2) + Math.pow(to[1] - from[1], 2)
     );
-
     if (distance > 100) return 4;
     if (distance > 50) return 5;
     if (distance > 20) return 6;
@@ -58,7 +60,7 @@ const FlightMap = () => {
       Math.cos(lat1Rad) * Math.sin(lat2Rad) -
       Math.sin(lat1Rad) * Math.cos(lat2Rad) * Math.cos(deltaLonRad);
 
-    return (Math.atan2(y, x) * 180) / Math.PI + 360 % 360;
+    return ((Math.atan2(y, x) * 180) / Math.PI + 360) % 360;
   };
 
   useEffect(() => {
@@ -117,7 +119,6 @@ const FlightMap = () => {
       });
 
       // Fly animation
-      
       setTimeout(() => {
         map.flyTo({
           ...end,
