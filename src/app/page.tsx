@@ -18,7 +18,7 @@ export default function Home() {
     if (view === "map") {
       const timer = setTimeout(() => {
         setView("slideshow")
-      }, 16000) // 16s matches flight animation + delay
+      }, 11000) // 16s matches flight animation + delay
       return () => clearTimeout(timer)
     }
   }, [view])

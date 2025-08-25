@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import countries from "@/data/countries.json";
-import { UserData } from "@/types/UserData";
+// import { UserData } from "@/types/UserData";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
 
@@ -122,9 +122,9 @@ const FlightMap: React.FC<FlightMapProps> = ({ homeCountry, visitingCountry }) =
       setTimeout(() => {
         map.flyTo({
           ...end,
-          duration: 15000,
+          duration: 10000,
           curve: 1.9,
-          speed: 0.6,
+          speed: 0.9,
           essential: true,
         });
       }, 1500);
