@@ -9,12 +9,17 @@ import countries from "@/data/countries.json";
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
 
 // Helper to get coordinates
-const getCountryCoords = (alpha3: string): [number, number] => {
+const getCountryCoords = (alpha3: string, type: "capital" | "centroid"): [number, number] => {
   const country = countries.find((c) => c["alpha-3"] === alpha3);
-  if (!country || country.longitude == null || country.latitude == null) {
+  if (!country || country['cap-lat'] == null || country['cap-long'] == null) {
     return [0, 0];
   }
-  return [country.longitude, country.latitude];
+  return type === "capital"
+    ? [country['cap-long'], country['cap-lat']]
+    : [
+        country['longitude'] != null ? country['longitude'] : 0,
+        country['latitude'] != null ? country['latitude'] : 0
+      ];
 };
 
 const FlightMap = () => {
@@ -26,8 +31,8 @@ const FlightMap = () => {
   const fromCode = searchParams.get("from") || "USA";
   const toCode = searchParams.get("to") || "KHM";
 
-  const ORIGIN = { code: fromCode, coords: getCountryCoords(fromCode) };
-  const DEST = { code: toCode, coords: getCountryCoords(toCode) };
+  const ORIGIN = { code: fromCode, coords: getCountryCoords(fromCode, "centroid") };
+  const DEST = { code: toCode, coords: getCountryCoords(toCode, "capital") };
 
   const calculateOptimalZoom = (from: [number, number], to: [number, number]) => {
     const distance = Math.sqrt(
