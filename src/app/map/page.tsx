@@ -7,7 +7,7 @@ import FlightMap from "@/components/FlightMap";
 export default function MapPage() {
   return (
     <Suspense fallback={<div>Loading map...</div>}>
-      <FlightMap />
+      <FlightMap  />
     </Suspense>
   );
 }

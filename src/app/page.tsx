@@ -74,9 +74,9 @@ export default function Home() {
               className="flex flex-col gap-6"
             >
               
-              <Label htmlFor="country" className="text-4xl">
-                Where are you from?
-              </Label>
+             <Label htmlFor="country" className="text-4xl">
+  <span className="font-poppins">Where are you from?</span>
+</Label>
               <div className="relative w-full border rounded-xl shadow-sm">
                 <input
                   id="country"
@@ -97,7 +97,7 @@ export default function Home() {
                       {filtered.map((country) => (
                         <motion.li
                           key={country['alpha-2']}
-                          className="cursor-pointer flex items-center gap-3 px-4 py-4 text-2xl hover:bg-gray-100"
+                          className="cursor-pointer flex items-center gap-3 px-4 py-4 text-2xl hover:bg-yellow-300"
                           onClick={() => handleSelect(country)}
                           // variants={itemVariants}
                         >
@@ -106,7 +106,7 @@ export default function Home() {
                             svg
                             style={{ width: "1.5em", height: "1.5em" }}
                           />
-                          {country.name}
+                          {country.name.toUpperCase()}
                         </motion.li>
                       ))}
                     </motion.ul>
@@ -134,7 +134,7 @@ export default function Home() {
                   value={toCountry}
                   onChange={(e) => handleChange(e, "to")}
                   placeholder="Type a country..."
-                  className="w-full py-5 px-6 text-2xl"
+                  className="w-full py-5 px-6 text-2xl bg-yellow-200"
                 />
                 <AnimatePresence>
                   {filtered.length > 0 && (
@@ -150,7 +150,7 @@ export default function Home() {
                         .map((country) => (
                           <motion.li
                             key={country['alpha-2']}
-                            className="cursor-pointer flex items-center gap-3 px-4 py-4 text-2xl hover:bg-gray-100"
+                            className="cursor-pointer flex items-center gap-3 px-4 py-4 text-2xl hover:bg-yellow-300"
                             onClick={() => handleSelect(country)}
                             // variants={itemVariants}
                           >
@@ -159,7 +159,7 @@ export default function Home() {
                               svg
                               style={{ width: "1.5em", height: "1.5em" }}
                             />
-                            {country.name}
+                            {country.name.toUpperCase()}
                           </motion.li>
                         ))}
                     </motion.ul>

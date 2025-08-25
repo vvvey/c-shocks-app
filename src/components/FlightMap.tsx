@@ -8,14 +8,6 @@ import countries from "@/data/countries.json";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
 
-// Country type
-// interface Country {
-//   "alpha-3": string;
-//   longitude: number | null;
-//   latitude: number | null;
-//   [key: string]: unknown;
-// }
-
 // Helper to get coordinates
 const getCountryCoords = (alpha3: string): [number, number] => {
   const country = countries.find((c) => c["alpha-3"] === alpha3);
@@ -84,6 +76,7 @@ const FlightMap = () => {
     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: "mapbox://styles/vvvey/cmeqbedf500ee01qn3e26guvq",
+      interactive: false,
       ...start,
     });
 
@@ -119,11 +112,12 @@ const FlightMap = () => {
       });
 
       // Fly animation
+      
       setTimeout(() => {
         map.flyTo({
           ...end,
           duration: 15000,
-          curve: 1.8,
+          curve: 1.9,
           speed: 0.6,
           essential: true,
         });
