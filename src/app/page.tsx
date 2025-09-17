@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react"
 import MultiStepForm from "@/components/MultiStepForm"
 import FlightMap from "@/components/FlightMap"
 import Slideshow from "@/components/Slideshow"
+import Shocks from "@/components/Shocks"
 import { UserData } from "@/types/UserData"
 import { AnimatePresence, motion } from "framer-motion"
 
@@ -68,10 +69,14 @@ export default function Home() {
             exit={{ opacity: 0 }}
             className="absolute inset-0"
           >
-            <Slideshow
+            {/* <Slideshow
               homeCountry={userData.homeCountry}
               visitingCountry={userData.visitingCountry}
-            />
+            /> */}
+            <Shocks 
+            homeCountry={userData.homeCountry}
+              visitingCountry={userData.visitingCountry}
+               />
           </motion.div>
         )}
       </AnimatePresence>
