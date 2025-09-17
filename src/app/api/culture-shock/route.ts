@@ -5,7 +5,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export async function POST(req) {
+export async function POST(req: Request) {
   try {
     const { homeCountry, visitingCountry } = await req.json();
 
@@ -31,20 +31,34 @@ Only return JSON, no extra text. Do not include markdown code fences.
       messages: [{ role: "user", content: prompt }],
     });
 
-    let text = completion.choices[0].message.content;
+    const messageContent = completion.choices[0].message?.content;
 
-    // Strip code fences if ChatGPT adds them
-    text = text.trim().replace(/^```json/, "").replace(/^```/, "").replace(/```$/, "").trim();
+if (!messageContent) {
+  return NextResponse.json(
+    { error: "No content returned from OpenAI" },
+    { status: 500 }
+  );
+}
 
-    let jsonResult = [];
-    try {
-      jsonResult = JSON.parse(text);
-    } catch (e) {
-      console.error("Failed to parse JSON:", e, "\nText was:", text);
-      return NextResponse.json({ error: "Failed to parse AI response" }, { status: 500 });
-    }
+const text = messageContent
+  .trim()
+  .replace(/^```json/, "")
+  .replace(/^```/, "")
+  .replace(/```$/, "")
+  .trim();
 
-    return NextResponse.json({ result: jsonResult });
+let jsonResult = [];
+try {
+  jsonResult = JSON.parse(text);
+} catch (e) {
+  console.error("Failed to parse JSON:", e, text);
+  return NextResponse.json(
+    { error: "Failed to parse AI response" },
+    { status: 500 }
+  );
+}
+
+return NextResponse.json(jsonResult);
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

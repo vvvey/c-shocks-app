@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react"
 import MultiStepForm from "@/components/MultiStepForm"
 import FlightMap from "@/components/FlightMap"
-import Slideshow from "@/components/Slideshow"
+// import Slideshow from "@/components/Slideshow"
 import Shocks from "@/components/Shocks"
 import { UserData } from "@/types/UserData"
 import { AnimatePresence, motion } from "framer-motion"
